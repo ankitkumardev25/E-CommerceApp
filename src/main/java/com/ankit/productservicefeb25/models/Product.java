@@ -11,7 +11,7 @@ import java.util.Date;
 public class Product extends BaseModel{
     private String title;
     private String description;
-    private BigDecimal price;
+    private Double price;
     private String imageUrl;
     private Category category;
 }
