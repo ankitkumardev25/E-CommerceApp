@@ -1,7 +1,10 @@
 package com.ankit.productservicefeb25.controllers;
 
+import com.ankit.productservicefeb25.exceptions.ProductNotFoundException;
 import com.ankit.productservicefeb25.models.Product;
 import com.ankit.productservicefeb25.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,9 +19,18 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
+    public Product getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
+        ResponseEntity<Product> responseEntity = null;
+//        try{
+//            Product product = productService.getProductById(id);
+//            responseEntity = new ResponseEntity<>(product,HttpStatus.OK);
+//        }
+//        catch (ProductNotFoundException e){
+//            System.out.println(e.getMessage());
+//            responseEntity = new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+//        }
+        //        responseEntity = new ResponseEntity<>(product,HttpStatus.OK);
         return productService.getProductById(id);
-
     }
 
     @GetMapping()
@@ -44,5 +56,10 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable("id") Long id) {
 
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
     }
 }
